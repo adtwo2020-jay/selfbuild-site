@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>습관을 받았어요 · 이 몸이 얼마짜린데</title>
+<meta name="description" content="같이 해 보자는 습관을 받았어요. 목표만 정하고 바로 시작해요.">
+<meta property="og:title" content="같이 해 보자는 습관을 받았어요">
+<meta property="og:description" content="이 몸이 얼마짜린데 · 또 작심삼일? 이번엔 딱 하나만">
+<meta property="og:type" content="website">
+<meta name="apple-itunes-app" content="app-id=6815178497">
+<meta name="color-scheme" content="light dark">
+<style>
+:root{--bg:#F2F4F3;--fg:#1B252E;--mute:#6b7680;--line:#d5dad8;--green:#2F5D50;--btn:#1B252E;--btnfg:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#0E1114;--fg:#EEF1F0;--mute:#98a1a8;--line:#2a3138;--green:#7FA898;--btn:#EEF1F0;--btnfg:#0E1114}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;-webkit-text-size-adjust:100%}
+main{max-width:420px;margin:0 auto;padding:56px max(24px,env(safe-area-inset-left)) 48px;text-align:center}
+.app{font-size:12px;letter-spacing:.04em;color:var(--mute)}
+h1{font-family:"Iowan Old Style","Apple SD Gothic Neo",Georgia,serif;font-weight:400;font-size:32px;line-height:1.25;margin:28px 0 8px;word-break:keep-all;overflow-wrap:anywhere}
+.goal{font-size:14px;color:var(--mute);margin:0}
+.lead{font-size:15px;line-height:1.6;margin:22px 0 0}
+.btn{display:block;background:var(--btn);color:var(--btnfg);text-decoration:none;font-size:16px;padding:17px 0;margin-top:30px}
+ol{list-style:none;padding:0;margin:30px 0 0;text-align:left;border-top:1px solid var(--line)}
+li{display:flex;gap:14px;align-items:baseline;padding:14px 2px;border-bottom:1px solid var(--line);font-size:14px;line-height:1.5}
+li b{font-family:Georgia,serif;font-weight:400;font-size:17px;color:var(--green);min-width:12px}
+.open{font-size:13px;color:var(--mute);margin-top:26px}
+.open a{color:var(--fg)}
+.foot{font-size:11px;color:var(--mute);margin-top:40px;line-height:1.6}
+</style>
+</head>
+<body>
+<main>
+  <div class="app">이 몸이 얼마짜린데</div>
+  <h1 id="name">습관을 받았어요</h1>
+  <p class="goal" id="goal"></p>
+  <p class="lead">같이 해 보자는 습관을 받았어요.<br>목표만 정하고 바로 시작해요.</p>
+  <a class="btn" href="https://apps.apple.com/kr/app/id6815178497">App Store에서 받기</a>
+  <ol>
+    <li><b>1</b><span>「이 몸이 얼마짜린데」를 받아요.</span></li>
+    <li><b>2</b><span>설치한 뒤, 받은 링크를 한 번 더 눌러요.</span></li>
+    <li><b>3</b><span>목표만 정하고 시작해요.</span></li>
+  </ol>
+  <p class="open">이미 쓰고 있다면 <a id="open" href="howmuchbody://h">앱에서 열기</a></p>
+  <p class="foot">이 링크에는 습관의 이름 · 방식 · 목표만 담겨 있어요.<br>기록이나 몸 정보는 들어 있지 않아요.</p>
+</main>
+<script>
+(function () {
+  var q = new URLSearchParams(location.search);
+  var name = (q.get('n') || '').trim().slice(0, 30);
+  var kind = q.get('k') || '';
+  var goal = parseFloat(q.get('g') || '');
+  var unit = (q.get('u') || '').trim().slice(0, 8);
+  var win = parseInt(q.get('w') || '1', 10);
+  if (name) {
+    document.getElementById('name').textContent = name;
+    document.title = name + ' · 이 몸이 얼마짜린데';
+  }
+  var text = '';
+  if (isFinite(goal) && goal > 0) {
+    var n = (Math.round(goal * 100) / 100).toLocaleString('ko-KR');
+    if (kind === 'up') text = (goal <= 1 && unit === '회') ? '채우기 · 하루 한 번' : '채우기 · 하루 ' + n + unit;
+    else if (kind === 'down') text = '줄이기 · 하루 ' + n + unit + '까지';
+    else if (kind === 'rolling' && win >= 1 && win <= 31) text = '꾸준히 · ' + win + '일에 ' + n + '번';
+  }
+  if (kind === 'quit') text = '끊기 · 안 한 날 세기';
+  document.getElementById('goal').textContent = text;
+  document.getElementById('open').href = 'howmuchbody://h' + location.search;
+})();
+</script>
+</body>
+</html>
